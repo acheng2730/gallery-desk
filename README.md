@@ -1,7 +1,7 @@
 # Gallery Desk
 
 Four independently changing photo frames, a Spotify turntable, and an audio spectrum, arranged around
-the Fuji wallpaper with the existing Conky system graphs. Starts automatically
+your desktop wallpaper with your existing Conky system graphs. Starts automatically
 when you sign in. Find **Gallery Desk** in Applications to open settings.
 
 ## Everyday controls
@@ -37,8 +37,8 @@ This repository includes a custom Conky configuration located in the `conky-conf
 - **Installation:** To use it, copy the contents of `conky-config/` to `~/.config/conky/`.
 - **Interfacing:** Gallery Desk automatically detects and integrates with the active Conky graphs. During "Arrange mode" (right-click -> Arrange widgets), Gallery Desk exposes the position of the Conky graphs, allowing you to drag and snap them alongside your photo frames and turntable. When you finish arranging, Gallery Desk writes the new layout coordinates back to your Conky configuration files and restarts the Conky process to apply the changes smoothly without crashing. Backups of original Conky configurations are saved in `~/.config/gallery-desk/backups/`.
 
-The initial collection is `~/Pictures/Desktop_Photos/Desktop_Photos_Original`
-(54 original photographs). Each frame independently chooses a fresh random delay
+The application selects random photographs from your configured photo directory.
+Each frame independently chooses a fresh random delay
 after every photo change, from the configured range (15–30 seconds by default).
 Set both ends to the same value for a fixed interval. The original files are never changed.
 EXIF orientation is respected; each image fits inside its frame without cropping
@@ -76,41 +76,17 @@ with `gallery-desk --background`. The application launcher opens settings, and
 widget extension remains installed and can be re-enabled in GNOME Extensions.
 Disable Gallery Desk's autostart entry if you prefer to return to that widget.
 
-This is a Python 3.12 / GTK 3.24 desktop application. On GNOME 46 Wayland it uses
-transparent Xwayland desktop windows, which support positioning and stay below
-normal application windows. The turntable uses one ordinary window for both
-drawing and input, so covering it also covers its controls. It temporarily uses
-a dock layer during Show Desktop and returns to the ordinary layer when apps return.
-During arrangement they temporarily become ordinary windows above the desktop,
-so desktop icons cannot intercept their drag handles.
-It needs the system PyGObject, libwnck, Cairo, Pillow, NumPy, and PipeWire's `pw-cat`
-packages already present on this machine; no extra package installation is needed.
+## Platform Support
 
-## Validation
+This is a Python 3.12 / GTK 3.24 desktop application designed specifically for Linux desktop environments (tested on GNOME 46 Wayland). **It is not supported on Windows or macOS.**
 
-Run from this directory:
+On Wayland it uses transparent Xwayland desktop windows, which support positioning and stay below normal application windows. The turntable uses one ordinary window for both drawing and input, so covering it also covers its controls. It temporarily uses a dock layer during Show Desktop and returns to the ordinary layer when apps return. During arrangement they temporarily become ordinary windows above the desktop, so desktop icons cannot intercept their drag handles.
 
-```sh
-dbus-run-session -- env GALLERY_TEST_BUS=1 /usr/bin/python3 -m unittest discover -s tests -v
-```
+It needs the system PyGObject, libwnck, Cairo, Pillow, NumPy, and PipeWire's `pw-cat` packages; no extra package installation is needed.
 
-Tests cover image geometry and alpha blending, EXIF orientation and source
-preservation, unique photo selection, saved layouts, playback timing, and MPRIS
-controls, seeking, disconnection, and reconnection. MPRIS tests use an isolated
-session bus and do not change actual Spotify playback.
-Spectrum tests use synthetic tones and mocked capture processes to verify
-frequency placement, stereo phase handling, silence, partial samples, smoothing,
-capture failures, cleanup, and saved visualizer settings.
-
-The opt-in `tests/live_pointer_check.py --live-desktop` check uses real pointer
-events to move and resize the running widgets, then restores their original layout
-and pointer position. Run it only while you are not using the mouse.
+## CLI Usage
 
 `gallery-desk --status` reports the live photo and player state.
-`gallery-desk --snapshot` creates a layout preview over the configured wallpaper;
-the preview does not include other open applications or desktop icons.
+`gallery-desk --snapshot` creates a layout preview over the configured wallpaper; the preview does not include other open applications or desktop icons.
 
-API references: [GTK desktop window hints](https://docs.gtk.org/gtk3/method.Window.set_type_hint.html),
-[MPRIS player interface](https://specifications.freedesktop.org/mpris/latest/Player_Interface.html),
-[PipeWire monitor stream keys](https://docs.pipewire.org/group__pw__keys.html),
-[PipeWire passive nodes](https://docs.pipewire.org/page_man_pipewire-props_7.html).
+API references: [GTK desktop window hints](https://docs.gtk.org/gtk3/method.Window.set_type_hint.html), [MPRIS player interface](https://specifications.freedesktop.org/mpris/latest/Player_Interface.html), [PipeWire monitor stream keys](https://docs.pipewire.org/group__pw__keys.html), [PipeWire passive nodes](https://docs.pipewire.org/page_man_pipewire-props_7.html).
