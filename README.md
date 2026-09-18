@@ -6,6 +6,8 @@ when you sign in. Find **Gallery Desk** in Applications to open settings.
 
 ## Installation
 
+This application requires **Python 3** (tested with Python 3.12).
+
 Clone this repository and run the installation script:
 ```sh
 git clone https://github.com/acheng2730/gallery-desk.git
@@ -13,6 +15,7 @@ cd gallery-desk
 python3 install.py
 ```
 The installer automatically sets up a launcher in your Applications menu and configures Gallery Desk to autostart via `~/.config/autostart/gallery-desk.desktop` when you sign in.
+
 
 ## Everyday controls
 
