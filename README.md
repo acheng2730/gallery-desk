@@ -1,0 +1,110 @@
+# Gallery Desk
+
+Four independently changing photo frames, a Spotify turntable, and an audio spectrum, arranged around
+the Fuji wallpaper with the existing Conky system graphs. Starts automatically
+when you sign in. Find **Gallery Desk** in Applications to open settings.
+
+## Everyday controls
+
+- Right-click a photo, a turntable control, or the audio visualizer and choose
+  **Arrange widgets**. Drag a widget to move it; drag the lower-right corner of
+  a photo, turntable, or visualizer to resize.
+  The system graphs can also be moved in this mode. Click **Done** or press Escape
+  while the arrangement toolbar has focus. Positions and sizes save automatically.
+  The Arrange toolbar's **Snap** switch shows a faint grid and snaps nearby
+  edges and centers. Equal gaps between neighboring widgets take priority;
+  the pixel field controls the fallback grid spacing.
+- **Settings** changes the photo folder, interval range, fade duration, corner radius,
+  number of frames, and individual sizes. **Add photo frame** and **Remove this
+  frame** are also in each photo's context menu. Up to 12 frames are supported.
+- Click the turntable's previous, play/pause, and next buttons to control Spotify.
+  Click or drag the progress bar to seek. Click **SPOTIFY** to open Spotify.
+  The three dots open the widget menu. These controls work directly on the
+  desktop outside Arrange mode; the record and background let clicks through.
+  Controls brighten on hover, and the tonearm glides between its parked and
+  playing positions when playback or tracks change.
+- The audio visualizer displays 32 frequency bands from 50 Hz to 16 kHz with
+  smooth decay and falling peak markers. It follows the desktop's default audio
+  output, including Spotify, browsers, and other apps. **Settings → Show spectrum**
+  hides or enables it; **Visualizer width** changes its size.
+
+Moving the system graphs briefly restarts Conky, so its graph history rebuilds.
+This avoids a crash in the installed Conky version when it reloads its layout.
+
+The initial collection is `~/Pictures/Desktop_Photos/Desktop_Photos_Original`
+(54 original photographs). Each frame independently chooses a fresh random delay
+after every photo change, from the configured range (15–30 seconds by default).
+Set both ends to the same value for a fixed interval. The original files are never changed.
+EXIF orientation is respected; each image fits inside its frame without cropping
+or background bars. The square arrangement outline marks the reserved footprint;
+it disappears when you finish arranging. Both outgoing and incoming photographs
+are reserved globally so frames do not display the same photo simultaneously.
+With too few photographs, a frame waits rather than duplicates another frame.
+
+Spotify uses the desktop application's existing login and local playback interface.
+Open the Spotify desktop app to connect; browser-only Spotify sessions are not
+supported. Album artwork is cached locally. The record turns while music plays.
+
+The visualizer reads stereo samples from PipeWire's output monitor into memory;
+it does not capture the microphone or save audio. Its passive connection lets
+the audio device suspend when idle. Bars settle when playback stops, and capture
+reconnects automatically if the audio service restarts. System output volume may
+not affect monitor levels, depending on the audio device's monitor configuration.
+
+The turntable and spectrum use frosted backgrounds: a cached 16-pixel blur of
+the zoomed desktop wallpaper, a light gray tint, and subtle grain. The wallpaper
+stays aligned as either widget moves or resizes; text and controls remain sharp.
+
+## Files and recovery
+
+- Settings: `~/.config/gallery-desk/settings.json`
+- Application: `~/.local/share/gallery-desk/`
+- Launcher: `~/.local/bin/gallery-desk`
+- Autostart: `~/.config/autostart/gallery-desk.desktop`
+- Image cache and logs: `~/.cache/gallery-desk/`
+- Original Conky configuration: `~/.config/gallery-desk/backups/conky-system.conf`
+
+Quit from a widget's context menu, or run `gallery-desk --quit`. Launch it again
+with `gallery-desk --background`. The application launcher opens settings, and
+`gallery-desk --arrange` opens arrangement mode. The previous Picture desktop
+widget extension remains installed and can be re-enabled in GNOME Extensions.
+Disable Gallery Desk's autostart entry if you prefer to return to that widget.
+
+This is a Python 3.12 / GTK 3.24 desktop application. On GNOME 46 Wayland it uses
+transparent Xwayland desktop windows, which support positioning and stay below
+normal application windows. The turntable uses one ordinary window for both
+drawing and input, so covering it also covers its controls. It temporarily uses
+a dock layer during Show Desktop and returns to the ordinary layer when apps return.
+During arrangement they temporarily become ordinary windows above the desktop,
+so desktop icons cannot intercept their drag handles.
+It needs the system PyGObject, libwnck, Cairo, Pillow, NumPy, and PipeWire's `pw-cat`
+packages already present on this machine; no extra package installation is needed.
+
+## Validation
+
+Run from this directory:
+
+```sh
+dbus-run-session -- env GALLERY_TEST_BUS=1 /usr/bin/python3 -m unittest discover -s tests -v
+```
+
+Tests cover image geometry and alpha blending, EXIF orientation and source
+preservation, unique photo selection, saved layouts, playback timing, and MPRIS
+controls, seeking, disconnection, and reconnection. MPRIS tests use an isolated
+session bus and do not change actual Spotify playback.
+Spectrum tests use synthetic tones and mocked capture processes to verify
+frequency placement, stereo phase handling, silence, partial samples, smoothing,
+capture failures, cleanup, and saved visualizer settings.
+
+The opt-in `tests/live_pointer_check.py --live-desktop` check uses real pointer
+events to move and resize the running widgets, then restores their original layout
+and pointer position. Run it only while you are not using the mouse.
+
+`gallery-desk --status` reports the live photo and player state.
+`gallery-desk --snapshot` creates a layout preview over the configured wallpaper;
+the preview does not include other open applications or desktop icons.
+
+API references: [GTK desktop window hints](https://docs.gtk.org/gtk3/method.Window.set_type_hint.html),
+[MPRIS player interface](https://specifications.freedesktop.org/mpris/latest/Player_Interface.html),
+[PipeWire monitor stream keys](https://docs.pipewire.org/group__pw__keys.html),
+[PipeWire passive nodes](https://docs.pipewire.org/page_man_pipewire-props_7.html).
