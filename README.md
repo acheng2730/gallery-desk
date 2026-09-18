@@ -31,6 +31,12 @@ when you sign in. Find **Gallery Desk** in Applications to open settings.
 Moving the system graphs briefly restarts Conky, so its graph history rebuilds.
 This avoids a crash in the installed Conky version when it reloads its layout.
 
+## Conky Integration
+
+This repository includes a custom Conky configuration located in the `conky-config/` directory.
+- **Installation:** To use it, copy the contents of `conky-config/` to `~/.config/conky/`.
+- **Interfacing:** Gallery Desk automatically detects and integrates with the active Conky graphs. During "Arrange mode" (right-click -> Arrange widgets), Gallery Desk exposes the position of the Conky graphs, allowing you to drag and snap them alongside your photo frames and turntable. When you finish arranging, Gallery Desk writes the new layout coordinates back to your Conky configuration files and restarts the Conky process to apply the changes smoothly without crashing. Backups of original Conky configurations are saved in `~/.config/gallery-desk/backups/`.
+
 The initial collection is `~/Pictures/Desktop_Photos/Desktop_Photos_Original`
 (54 original photographs). Each frame independently chooses a fresh random delay
 after every photo change, from the configured range (15–30 seconds by default).
