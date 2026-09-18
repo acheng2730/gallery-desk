@@ -4,19 +4,20 @@ Four independently changing photo frames, a Spotify turntable, and an audio spec
 your desktop wallpaper with your existing Conky system graphs. Starts automatically
 when you sign in. Find **Gallery Desk** in Applications to open settings.
 
+## Installation
+
+Clone this repository and run the installation script:
+```sh
+git clone https://github.com/acheng2730/gallery-desk.git
+cd gallery-desk
+python3 install.py
+```
+The installer automatically sets up a launcher in your Applications menu and configures Gallery Desk to autostart via `~/.config/autostart/gallery-desk.desktop` when you sign in.
+
 ## Everyday controls
 
-- Right-click a photo, a turntable control, or the audio visualizer and choose
-  **Arrange widgets**. Drag a widget to move it; drag the lower-right corner of
-  a photo, turntable, or visualizer to resize.
-  The system graphs can also be moved in this mode. Click **Done** or press Escape
-  while the arrangement toolbar has focus. Positions and sizes save automatically.
-  The Arrange toolbar's **Snap** switch shows a faint grid and snaps nearby
-  edges and centers. Equal gaps between neighboring widgets take priority;
-  the pixel field controls the fallback grid spacing.
-- **Settings** changes the photo folder, interval range, fade duration, corner radius,
-  number of frames, and individual sizes. **Add photo frame** and **Remove this
-  frame** are also in each photo's context menu. Up to 12 frames are supported.
+- **Arrange Widgets**: Open the **Gallery Desk** app from your application launcher and select **Arrange**. Drag a widget to move it; drag the lower-right corner of a photo, turntable, or visualizer to resize. The system graphs can also be moved in this mode. Click **Done** or press Escape while the arrangement toolbar has focus. Positions and sizes save automatically. The Arrange toolbar's **Snap** switch shows a faint grid and snaps nearby edges and centers. Equal gaps between neighboring widgets take priority; the pixel field controls the fallback grid spacing.
+- **Settings**: Open the **Gallery Desk** app to change the photo folder, interval range, fade duration, corner radius, number of frames, and individual sizes. Up to 12 frames are supported.
 - Click the turntable's previous, play/pause, and next buttons to control Spotify.
   Click or drag the progress bar to seek. Click **SPOTIFY** to open Spotify.
   The three dots open the widget menu. These controls work directly on the
